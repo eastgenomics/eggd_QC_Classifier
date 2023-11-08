@@ -19,7 +19,6 @@ Output structure:
    "Details":{
        "SampleID_1":{
             "Metric_1":{
-                "threshold": "json like structure from config file",
                 "record":[
                     {
                     "sample":"SampleID_1_R1",
@@ -34,6 +33,9 @@ Output structure:
                 ]
             }
         }
+    }.
+    "Thresholds":{
+        "Metric_1 :  "json like structure from config file"
     }
 }
 
@@ -78,8 +80,9 @@ def main():
     yaml_content = Classifier.read_config(args.config)
     config_fields = list(yaml_content["table_cond_formatting_rules"].keys())
 
-    details_report_output = {}
     summary_report_output = {}
+    details_report_output = {}
+
     for sample in sample_list:
         metrics_summary = {}
         status_list = []
@@ -107,7 +110,6 @@ def main():
 
                 record = {
                           header_id:{
-                                     "thresholds": parameters,
                                      "record": record
                                     }
                          }
@@ -123,14 +125,25 @@ def main():
         summary_report_output.update({sample:status_summary})
         details_report_output.update({sample:metrics_summary})
 
+    # Generate structure of thresholds report
+    thresholds_report_output = {}
+    for config_field in config_fields:
+        header_id = Classifier.map_header_id(config_field)
+        parameters = Classifier.get_unique_parameters(config_field,
+                                                      yaml_content)
+        thresholds_report_output.update({header_id: parameters})
+
     # Generating qc_report structure
     qc_report_output = {"Summary":summary_report_output}
     qc_report_output.update({"Details": details_report_output})
+    qc_report_output.update({"Thresholds": thresholds_report_output})
     qc_report_filename = Classifier.get_output_filename(multiqc_data)
 
     # Saving output
     with open(qc_report_filename, 'w', encoding='UTF-8') as output_filename:
-        json.dump(qc_report_output, output_filename)
+        json.dump(qc_report_output, output_filename, indent="   ")
+
+    return qc_report_output
 
 if __name__ == "__main__":
     main()

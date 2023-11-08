@@ -27,7 +27,7 @@ import pandas
 import yaml
 
 
-def map_header_id(config_field):
+def map_header_id(config_field) -> str:
     """ Function that gives the Header ID for any give Unique ID.
     IMPORTANT: file "idConfigFieldRelationship.json" in "resources/"should be 
     included to work.
@@ -48,10 +48,13 @@ def map_header_id(config_field):
     id_mapping = {item["Config_field"]: item["Header_ID"] for item in config_field_relationship}
     header_id = id_mapping.get(config_field)
 
+    if header_id is None:
+        raise NameError("Missing Header ID for config field: " + config_field)
+
     return header_id
 
 
-def read_config(yaml_file):
+def read_config(yaml_file) -> dict:
     """Function that reads any .yaml file in a .json-like structure.
 
     Args:
@@ -61,10 +64,15 @@ def read_config(yaml_file):
     """
     with open(yaml_file, 'r', encoding='UTF-8') as file:
         yaml_file = yaml.safe_load(file)
+
+    if not yaml_file.get("table_cond_formatting_rules"):
+        raise TypeError(f"{yaml_file} does not have "
+                        + "'table_cond_formatting_rules' key")
+
     return yaml_file
 
 
-def get_unique_parameters(unique_id, yaml_file):
+def get_unique_parameters(unique_id, yaml_file) -> dict:
     """Function  that outputs the list of conditions/parameters found in the config.yaml file.
 
     Input:
@@ -77,11 +85,10 @@ def get_unique_parameters(unique_id, yaml_file):
 
     """
 
-    parameters = yaml_file["table_cond_formatting_rules"].get(unique_id)
-    return parameters
+    return yaml_file["table_cond_formatting_rules"][unique_id]
 
 
-def get_sample_lists(csv_filepath):
+def get_sample_lists(csv_filepath) -> list:
     """Creates a structured list of samples from the provided SampleSheet.csv.
 
     Args:
@@ -100,7 +107,7 @@ def get_sample_lists(csv_filepath):
     return sample_list
 
 
-def get_multiqc_data(multiqc_filepath):
+def get_multiqc_data(multiqc_filepath) -> dict:
     """Return a flattened dictionary with values for all samples from given multiqc run.
 
     Args:
@@ -112,9 +119,10 @@ def get_multiqc_data(multiqc_filepath):
     with open(multiqc_filepath, 'r', encoding='UTF-8') as file:
         multiqc_data = json.load(file)
 
-        data = flatten(multiqc_data, '.', root_keys_to_ignore = {'report_data_sources',
-                                                                 'report_general_stats_headers',
-                                                                 'report_plot_data'})
+        data = flatten(multiqc_data, '.',
+                       root_keys_to_ignore = {'report_data_sources',
+                                              'report_general_stats_headers',
+                                              'reports_plot_data'})
     return data
 
 
@@ -125,7 +133,7 @@ def get_key_value(summarised_data, sample_id, header_id):
         summarised_data (dict): multiqc_data obtained from get_multiqc_data().
         sample_id (str): Sample ID obtained from SampleSheet.csv
         header_id (str): Metric used in multiqc.json file, obtained from 
-        output map_header_id(config_field)
+                         output map_header_id(config_field)
 
     Returns:
         dict: dictionary with following structure {"multiqc_sample_ID" : "value"}, 
@@ -140,13 +148,14 @@ def get_key_value(summarised_data, sample_id, header_id):
             else:
                 new_key = re.search(f"{sample_id}[A-Z0-9_]+", key)
 
-            # Need to create an exception for "PCT_TARGET_BASES_20X"
+            # Exception created for "PCT_TARGET_BASES_20X"
             if header_id == "PCT_TARGET_BASES_20X":
                 val = val*100
 
             if new_key:
                 new_key = new_key.group()
                 result.update({new_key:val})
+
     return result
 
 
@@ -194,11 +203,14 @@ def get_status(value, parameters):
 
         # Config field "Match_Sexes" may return value as a string "false" or "true"
         # which is different to what is set for the config fields.
-        if value == "true":
-            status = "pass"
+    if value in ["true", "pass"]:
+        status = "pass"
 
-        if value == "false":
-            status = "fail"
+    if value in ["unknown", "warn"]:
+        status = "warn"
+
+    if value in ["false", "fail"]:
+        status = "fail"
 
     return status # Returns the determined status
 

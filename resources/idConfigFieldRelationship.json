@@ -430,5 +430,133 @@
   {
     "Header_ID": "percent_perfectIndex",
     "Config_field": "percent_perfectIndex"
+  },
+  {
+    "Header_ID": "summed_median",
+    "Config_field": "mqc-generalstats-picard-summed_median"
+  },
+  {
+    "Header_ID": "250x",
+    "Config_field": "mqc-generalstats-custom_coverage-250x"
+  },
+  {
+    "Header_ID": "500x",
+    "Config_field": "mqc-generalstats-custom_coverage-500x"
+  },
+  {
+    "Header_ID": "1000x",
+    "Config_field": "mqc-generalstats-custom_coverage-1000x"
+  },
+  {
+    "Header_ID": "Usable unique bases on-target",
+    "Config_field": "mqc-generalstats-custom_coverage-Usable_unique_bases_on_target"
+  },
+  {
+    "Header_ID": "PCT_TARGET_BASES_100X",
+    "Config_field": "mqc-generalstats-picard-PCT_TARGET_BASES_100X"
+  },
+  {
+    "Header_ID": "PCT_PF_READS_ALIGNED",
+    "Config_field": "mqc-generalstats-picard-PCT_PF_READS_ALIGNED"
+  },
+  {
+    "Header_ID": "summed_mean",
+    "Config_field": "mqc-generalstats-picard-summed_mean"
+  },
+  {
+    "Header_ID": "SNVs_unk",
+    "Config_field": "unk"
+  },
+  {
+    "Header_ID": "SNVs_total.truth",
+    "Config_field": "total.truth"
+  },
+  {
+    "Header_ID": "SNVs_total.query",
+    "Config_field": "total.query"
+  },
+  {
+    "Header_ID": "SNVs_tp",
+    "Config_field": "tp"
+  },
+  {
+    "Header_ID": "SNVs_fn",
+    "Config_field": "fn"
+  },
+  {
+    "Header_ID": "SNVs_fp",
+    "Config_field": "fp"
+  },
+  {
+    "Header_ID": "SNVs_recall",
+    "Config_field": "recall"
+  },
+  {
+    "Header_ID": "SNVs_precision",
+    "Config_field": "precision"
+  },
+  {
+    "Header_ID": "indels_unk",
+    "Config_field": "unk-1"
+  },
+  {
+    "Header_ID": "indels_total.truth",
+    "Config_field": "total_truth-1"
+  },
+  {
+    "Header_ID": "indels_total.query",
+    "Config_field": "total_query-1"
+  },
+  {
+    "Header_ID": "indels_tp",
+    "Config_field": "tp-1"
+  },
+  {
+    "Header_ID": "indels_fn",
+    "Config_field": "fn-1"
+  },
+  {
+    "Header_ID": "indels_fp",
+    "Config_field": "fp-1"
+  },
+  {
+    "Header_ID": "indels_recall",
+    "Config_field": "recall-1"
+  },
+  {
+    "Header_ID": "indels_precision",
+    "Config_field": "precision-1"
+  },
+  {
+    "Header_ID": "records_unk",
+    "Config_field": "unk-2"
+  },
+  {
+    "Header_ID": "records_total.truth",
+    "Config_field": "total.truth-2"
+  },
+  {
+    "Header_ID": "records_total.query",
+    "Config_field": "total.query-2"
+  },
+  {
+    "Header_ID": "records_tp",
+    "Config_field": "tp-2"
+  },
+  {
+    "Header_ID": "records_fn",
+    "Config_field": "fn-2"
+  },
+  {
+    "Header_ID": "records_fp",
+    "Config_field": "fp-2"
+  },
+  {
+    "Header_ID": "records_recall",
+    "Config_field": "recall-2"
+  },
+  {
+    "Header_ID": "records_precision",
+    "Config_field": "precision-2"
   }
-]
+ ]
